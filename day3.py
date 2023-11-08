@@ -16,6 +16,16 @@ def main():
 
     print(len(wireHistories))
     # TODO: check each point in each wire history for all intersection points, then find the manhatten distance from those points (add x and y)
+    intersections = []
+    for firstPosition in wireHistories[0]:
+        for secondPosition in wireHistories[0]:
+            if firstPosition == secondPosition:
+                intersections.append(firstPosition)
+
+    print(len(intersections))
+    lengths = list(map(lambda position: abs(position[0]) + abs(position[1]), intersections))
+    print(min(lengths))
+    # 165 too low
 
 def completeInstruction(instruction: str, lastPosition: tuple) -> tuple:
     if instruction[0] == 'U':
