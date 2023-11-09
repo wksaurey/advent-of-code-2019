@@ -53,6 +53,8 @@ Opcodes
 '''
 
 testIntcode = [1002,4,3,4,33]
+ADDRESSMODE = 0
+INSTANTMODE = 1
 
 def main():
     runProgram()
@@ -76,7 +78,7 @@ def runProgram(intcode):
                 index+=1
                 param2 = getNumber(intcode, modes[1], intcode[index])
                 index+=1
-                param3 = getNumber(intcode, 1, intcode[index])
+                param3 = getNumber(intcode, INSTANTMODE, intcode[index])
                 intcode[param3] = param1 + param2
             case 2:
                 index+=1
@@ -84,12 +86,18 @@ def runProgram(intcode):
                 index+=1
                 param2 = getNumber(intcode, modes[1], intcode[index])
                 index+=1
-                param3 = getNumber(intcode, 1, intcode[index])
+                param3 = getNumber(intcode, INSTANTMODE, intcode[index])
                 intcode[param3] = param1 * param2
             case 3:
-                pass
+                print('Opcode 3 input: ')
+                userInput = int(input())
+                index+=1
+                param1 = getNumber(intcode, INSTANTMODE, intcode[index])
+                intcode[param3] = userInput
             case 4:
-                pass
+                index+=1
+                param1 = getNumber(intcode, INSTANTMODE, intcode[index])
+                print(f'Opcode 4 output: {intcode[param1]}')
             case 99:
                 message = 'Exiting program due to opcode 99\n'
                 print(message)
@@ -105,9 +113,9 @@ def runProgram(intcode):
 def getNumber(intcode: List[int], mode: str, param: int):
     mode = int(mode)
     match mode:
-        case 0:
+        case 0: # ADDRESSMODE
             return intcode[param]
-        case 1:
+        case 1: # INSTANTMODE
             return param
 
 def getModes(modes):
