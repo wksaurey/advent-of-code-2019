@@ -1,7 +1,7 @@
 from util import read_stripped_lines
 
 def main():
-    wirePaths = read_stripped_lines('input/day3test.text')
+    wirePaths = read_stripped_lines('input/day3.text')
     wirePaths = list(map(lambda element: element.split(','), wirePaths))
     wireHistories = []
 
@@ -32,7 +32,8 @@ def completeInstruction(direction: str, lastPosition: tuple) -> tuple:
     elif direction == 'D':
         return (lastPosition[0], lastPosition[1]-1)
     elif direction == 'R':
-        return (lastPosition[0+1], lastPosition[1])
+        newPosition = (lastPosition[0]+1, lastPosition[1])
+        return newPosition
     elif direction == 'L':
         return (lastPosition[0]-1, lastPosition[1])
     else:
