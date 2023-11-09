@@ -34,11 +34,8 @@ Opcodes
     param2: second number to multiply
     param3: address to save product
 
-3 - up to 1 mode, 1 param
+3 - 0 modes, 1 param
     Desc: takes a single int as input and puts it in the input address
-    mode1: 
-        0: param1 is in position mode
-        1: param1 is in immediate mode
     param1: address to put input int
 
 4 - up to 1 mode, 1 param
@@ -60,7 +57,8 @@ def main():
     runProgram()
 
 def parseInputFile(filename: str) -> List[int]:
-    intcode = open('input/day2.text').readline()
+    print(f'Reading from file {filename}')
+    intcode = open(filename).readline()
     intcode = list(map(lambda element: int(element), intcode.split(',')))
     return intcode
 
@@ -93,10 +91,10 @@ def runProgram(intcode):
                 userInput = int(input())
                 index+=1
                 param1 = getNumber(intcode, INSTANTMODE, intcode[index])
-                intcode[param3] = userInput
+                intcode[param1] = userInput
             case 4:
                 index+=1
-                param1 = getNumber(intcode, INSTANTMODE, intcode[index])
+                param1 = getNumber(intcode, modes[2], intcode[index])
                 print(f'Opcode 4 output: {intcode[param1]}')
             case 99:
                 message = 'Exiting program due to opcode 99\n'
