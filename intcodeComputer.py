@@ -54,7 +54,7 @@ ADDRESSMODE = 0
 INSTANTMODE = 1
 
 def main():
-    runProgram()
+    runProgram(testIntcode)
 
 def parseInputFile(filename: str) -> List[int]:
     print(f'Reading from file {filename}')
@@ -72,29 +72,29 @@ def runProgram(intcode):
         match opcode:
             case 1:
                 index+=1
-                param1 = getNumber(intcode, modes[2], intcode[index])
+                param1 = getNumber(intcode, modes[2], index)
                 index+=1
-                param2 = getNumber(intcode, modes[1], intcode[index])
+                param2 = getNumber(intcode, modes[1], index)
                 index+=1
-                param3 = getNumber(intcode, INSTANTMODE, intcode[index])
+                param3 = getNumber(intcode, INSTANTMODE, index)
                 intcode[param3] = param1 + param2
             case 2:
                 index+=1
-                param1 = getNumber(intcode, modes[2], intcode[index])
+                param1 = getNumber(intcode, modes[2], index) 
                 index+=1
-                param2 = getNumber(intcode, modes[1], intcode[index])
+                param2 = getNumber(intcode, modes[1], index)
                 index+=1
-                param3 = getNumber(intcode, INSTANTMODE, intcode[index])
+                param3 = getNumber(intcode, INSTANTMODE, index)
                 intcode[param3] = param1 * param2
             case 3:
                 print('Opcode 3 input: ')
                 userInput = int(input())
                 index+=1
-                param1 = getNumber(intcode, INSTANTMODE, intcode[index])
+                param1 = getNumber(intcode, INSTANTMODE, index)
                 intcode[param1] = userInput
             case 4:
                 index+=1
-                param1 = getNumber(intcode, modes[2], intcode[index])
+                param1 = getNumber(intcode, INSTANTMODE, index)
                 print(f'Opcode 4 output: {intcode[param1]}')
             case 99:
                 message = 'Exiting program due to opcode 99\n'
@@ -108,12 +108,13 @@ def runProgram(intcode):
         index += 1
     return(intcode)
 
-def getNumber(intcode: List[int], mode: str, param: int):
+def getNumber(intcode: List[int], mode: str, index: int):
     mode = int(mode)
+    param = intcode[index]
     match mode:
-        case 0: # ADDRESSMODE
+        case 0: # AddressMode
             return intcode[param]
-        case 1: # INSTANTMODE
+        case 1: # InstantMode
             return param
 
 def getModes(modes):
