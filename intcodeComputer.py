@@ -45,11 +45,65 @@ Opcodes
         1: param1 is in immediate mode
     param1: address of the number to be output
 
+5 - up to 2 modes, 2 params
+    Desc, if param1 is non-zero, change pointer (index) to param2
+    mode1: 
+        0: param1 is in position mode
+        1: param1 is in immediate mode
+    mode2: 
+        0: param1 is in position mode
+        1: param1 is in immediate mode
+    param1: zero or non-zero (true or false)
+    param2: value to change the pointer (index) to
+
+6 - up to 2 modes, 2 params
+    Desc, if param1 is zero, change pointer (index) to param2
+    mode1: 
+        0: param1 is in position mode
+        1: param1 is in immediate mode
+    mode2: 
+        0: param1 is in position mode
+        1: param1 is in immediate mode
+    param1: zero or non-zero (true or false but reverse of opcode 5)
+    param2: value to change the pointer (index) to
+
+7 - up to 3 modes, 3 params
+    Desc: if param1 is less than param2 store 1 in the address of param3
+        else, store 0
+    mode1: 
+        0: param1 is in position mode
+        1: param1 is in immediate mode
+    mode2: 
+        0: param2 is in position mode
+        1: param2 is in immediate mode
+    mode3:
+        0: param3 will always be in position mode
+    param1: first number to compare to the second
+    param2: second number to compare to the first
+    param3: address to save 1 or 0
+    
+8 - up to 3 modes, 3 params
+    Desc: if param1 is equal t0 param2 store 1 in the address of param3
+        else, store 0
+    mode1: 
+        0: param1 is in position mode
+        1: param1 is in immediate mode
+    mode2: 
+        0: param2 is in position mode
+        1: param2 is in immediate mode
+    mode3:
+        0: param3 will always be in position mode
+    param1: first number to compare to the second
+    param2: second number to compare to the first
+    param3: address to save 1 or 0
+
 99 - 0 modes, 0 params
     ends the program
 '''
 
-testIntcode = [1002,4,3,4,33]
+testIntcode = [3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
+1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
+999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99]
 ADDRESSMODE = 0
 INSTANTMODE = 1
 
@@ -87,15 +141,52 @@ def runProgram(intcode):
                 param3 = getNumber(intcode, INSTANTMODE, index)
                 intcode[param3] = param1 * param2
             case 3:
-                print('Opcode 3 input: ')
+                print('Opcode 3 input: ', end='')
                 userInput = int(input())
+                print()
                 index+=1
                 param1 = getNumber(intcode, INSTANTMODE, index)
                 intcode[param1] = userInput
             case 4:
                 index+=1
-                param1 = getNumber(intcode, INSTANTMODE, index)
-                print(f'Opcode 4 output: {intcode[param1]}')
+                param1 = getNumber(intcode, modes[2], index)
+                print(f'Opcode 4 output: {param1}')
+            case 5:
+                index+=1
+                param1 = getNumber(intcode, modes[2], index) 
+                index+=1
+                param2 = getNumber(intcode, modes[1], index)
+                if param1 != 0:
+                    index = param2 - 1
+            case 6:
+                index+=1
+                param1 = getNumber(intcode, modes[2], index) 
+                index+=1
+                param2 = getNumber(intcode, modes[1], index)
+                if param1 == 0:
+                    index = param2 - 1
+            case 7:
+                index+=1
+                param1 = getNumber(intcode, modes[2], index) 
+                index+=1
+                param2 = getNumber(intcode, modes[1], index)
+                index+=1
+                param3 = getNumber(intcode, INSTANTMODE, index)
+                if param1 < param2:
+                    intcode[param3] = 1
+                else:
+                    intcode[param3] = 0
+            case 8:
+                index+=1
+                param1 = getNumber(intcode, modes[2], index) 
+                index+=1
+                param2 = getNumber(intcode, modes[1], index)
+                index+=1
+                param3 = getNumber(intcode, INSTANTMODE, index)
+                if param1 == param2:
+                    intcode[param3] = 1
+                else:
+                    intcode[param3] = 0
             case 99:
                 message = 'Exiting program due to opcode 99\n'
                 print(message)
