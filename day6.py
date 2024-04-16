@@ -2,13 +2,35 @@ from typing import List, Callable
 
 from util import read_stripped_lines
 
+# Check if santa is below you (in the tree), if not, move up. 
+# Repeat until Santa is found. Move down. 
+
 def main() :
     orbitData = read_stripped_lines('input/day6.text')
     orbitData = list(map(lambda orbit : orbit.split(')'), orbitData))
     
     COM = makePlanet('COM', None, orbitData, 0)
-    orbitCount = countOrbits(COM, 0)
-    print(f'Orbit Count: {orbitCount}')
+    # part 1 vvv
+    # orbitCount = countOrbits(COM, 0)
+    # print(f'Orbit Count: {orbitCount}')
+    
+    #part 2 vvv
+    # findDistanceBetweenMoons(COM, 'YOU', 'SAN')
+    print(f'YOU is child of COM: {isParent(COM, "YOU")}')
+
+def findDistanceBetweenMoons(planet: Callable, moonName1: str, moonName2: str, distance: int = None) -> int: 
+    distance1 = findMoonDistance(planet, moonName1)
+    distance2 = findMoonDistance(planet, moonName2)
+    if distance1 + distance2 < 0:
+        return distance
+    for moon in planet.moons:
+        findDistanceBetweenMoons(moon, moonName1, moonName2, distance1+distance2)
+
+def findMoonDistance(planet: Callable, moonName: Callable, orbitDistance: int = 1) -> int:
+    for moon in planet.moons:
+        if moon.name == moonName:
+            return orbitDistance
+        return findMoonDistance(moon, moonName, orbitDistance+1)       
 
 def findLowestParent(planet, moon1, moon2):
     # if any children can 
@@ -16,12 +38,18 @@ def findLowestParent(planet, moon1, moon2):
         pass
 
 def isParent(parent, childName):
-    for moon in parent.moon:
+    if len(parent.moons) <= 0:
+        return None
+    for moon in parent.moons:
         if moon.name == childName:
             return True
-        else: 
-            return isParent(moon, childName)
-
+        foundMoon = isParent(moon, childName)
+        if foundMoon == True:
+            return foundMoon
+        elif foundMoon == False:
+            return foundMoon
+        elif foundMoon == None:
+            return foundMoon
 
 def countOrbits(planet, orbitCount):
     moonOrbitCount = 0
@@ -30,6 +58,10 @@ def countOrbits(planet, orbitCount):
     return orbitCount + moonOrbitCount + planet.orbits
 
 def makePlanet(name, planetParent, orbitData, orbits):
+    if name == 'YOU':
+        print('YOU found')
+    if name == 'SAN':
+        print('SAN found')
     moonNames = findMoonNames(name, orbitData)
     moons=[]
     planet = Planet(name, planetParent, moons, orbits)
