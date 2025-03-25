@@ -1,10 +1,12 @@
-from typing import List, Callable
+from typing import Callable, List
+
 
 class Node:
     def __init__(self, name: str, parent: Callable, children: List[Callable]) -> None:
         self.name = name
         self.parent = parent
         self.children = children
+
 
 class Tree:
     def __init__(self, root: Callable) -> None:
