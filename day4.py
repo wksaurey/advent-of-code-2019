@@ -16,7 +16,7 @@ for password in range(INPUTMIN, INPUTMAX):
         if int(password[index-1]) > int(password[index]):
             neverDecrease = False
 
-    if(hasAdjacent and neverDecrease):
-        potentialPasswordCount+=1
+    if (hasAdjacent and neverDecrease):
+        potentialPasswordCount += 1
 
 print(f'Count: {potentialPasswordCount}')

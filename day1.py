@@ -1,5 +1,6 @@
-from util import read_stripped_lines
 import math
+
+from util import read_stripped_lines
 
 
 def calculateFuel(mass):
@@ -9,12 +10,13 @@ def calculateFuel(mass):
         return 0
     return fuel + calculateFuel(fuel)
 
+
 def getFuel(mass):
     totalFuel = 0
     for module in modules:
         totalFuel += calculateFuel(module)
     return totalFuel
-    
 
-modules = read_stripped_lines('input/day1.text')
+
+modules = read_stripped_lines('input/day1.txt')
 print(getFuel(modules))

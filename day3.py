@@ -1,7 +1,8 @@
 from util import read_stripped_lines
 
+
 def main():
-    wirePaths = read_stripped_lines('input/day3.text')
+    wirePaths = read_stripped_lines('input/day3.txt')
     wirePaths = list(map(lambda element: element.split(','), wirePaths))
     wireHistories = []
 
@@ -26,6 +27,7 @@ def main():
     print(f'Min Dist: {min(lengths)}')
     # 165 too low
 
+
 def completeInstruction(direction: str, lastPosition: tuple) -> tuple:
     if direction == 'U':
         return Position(lastPosition.x, lastPosition.y+1, lastPosition.steps+1)
@@ -38,11 +40,13 @@ def completeInstruction(direction: str, lastPosition: tuple) -> tuple:
     else:
         print(f'Invalid path instruction {direction}')
 
+
 class Position:
     def __init__(self, x: int, y: int, steps: int) -> None:
         self.x = x
         self.y = y
         self.steps = steps
+
 
 if __name__ == '__main__':
     main()
